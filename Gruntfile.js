@@ -33,7 +33,7 @@ module.exports = function(grunt) {
       s1: {
         options: {
           port: 3000,
-          tasks: ['jshint', 'test'],
+          tasks: ['jshint', 'clean'],
         }
       }
     },

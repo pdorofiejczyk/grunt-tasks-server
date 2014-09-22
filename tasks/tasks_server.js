@@ -33,21 +33,24 @@ module.exports = function(grunt) {
       var tasks = req.params.tasks.split(',');
 
       for(var id in tasks) {
-        var task = tasks[id];
+        var task = tasks[id],
+            taskArgs = task.split(':');
 
-        if(!grunt.task.exists(task) || publicTasks.indexOf(task) === -1) {
+        if(!grunt.task.exists(taskArgs[0]) || publicTasks.indexOf(taskArgs[0]) === -1) {
           grunt.log.writeln('[Server] Task "' + task + '" is not available.');
           res.json({
             'msg': 'Task "' + task + '" is not available.',
             'result': {}
           });
+
+          return;
         }
       }
 
       grunt.log.writeln('[Server] Running tasks "' + tasks.join('", "') + '".' + "\n\n");
 
       grunt.util.spawn({grunt: true, args: tasks}, function(error, result, code) {
-        grunt.log.error(result.toString());
+        grunt.log.writeln(result.toString());
         res.json({
           'msg': 'Tasks "' + tasks.join('", "') + '"" executed.',
           'result': {
